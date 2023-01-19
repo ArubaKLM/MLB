@@ -191,7 +191,8 @@ webc %>%
 ```{r}
 coordinatetd <- webtd[grepl("Coordinates", webtd)]
 coord <- gsub("^.*\\Coor","Coor",coordinatetd)
-coor <- gsub("\\°W﻿ /.^*","",coord)
+coord
+coor <- gsub(".*\\°W﻿ / ","",coord)
 coor
 ```
 
@@ -204,11 +205,12 @@ scrape_coordinate_wiki <- function(url) {
   rvest::html_text()
   coordinatetd <- webtd[grepl("Coordinates", webtd)]
   coord <- gsub("^.*\\Coor","Coor",coordinatetd)
-  coor <- gsub("^.*\\°W / ","",coord)
+  coor <- gsub(".*\\°W﻿ / ","",coord)
   coordinate <- data.frame(
     url = url,
     coor = coor
   )
+  return(coordinate)
 }
   
 ```
@@ -217,6 +219,7 @@ scrape_coordinate_wiki <- function(url) {
 ```{r}
 length(mlb_1$url)
 scrape_coordinate_wiki(mlb_1$url[2])
+scrape_coordinate_wiki(mlb_1$url[4])
 urllist <-mlb_1$url
 nrow(urllist)
 ```
@@ -228,13 +231,13 @@ for (i in 1:length(urllist)) {
   coordinate <- scrape_coordinate_wiki(urllist[i])
   all_coord <- rbind(all_coord, coordinate)
 }
-
-all_coord
 ```
 
 
+
 ```{r}
-mlb_2 <- left_join(mlb_1, all_coord, by="url")
+allcoord <- read.csv("./allcoord.csv")
+mlb_2 <- left_join(mlb_1, allcoord, by="url")
 mlb_2
 ```
 
