@@ -1,0 +1,393 @@
+---
+title: "메이저리그 구장의 변화"
+subtitle: "좌석은 적게, 도심과는 가깝게"
+author: "윤준식"
+date: "`r format(Sys.Date())`" 
+tags: [MLB, ballpark, USsports]
+output:
+  html_document:
+    fig_height: 6
+    fig_width: 10
+    highlight: tango
+    theme: cosmo
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    self_contained: false
+---
+
+# 라이브러리 설정
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(googlesheets4)
+library(base)
+library(bbplot)
+library(skimr)
+library(stats)
+library(ggmap)
+library(vembedr)
+library(rvest)
+library(readtext)
+library(flextable)
+library(webdriver)
+library(readxl)
+library(geosphere)   
+klippy::klippy()
+options(scipen=999)
+setwd(".")
+getwd()
+```
+
+
+<div align="left">
+  <iframe id="introduction" 
+          title="건축가가 설명하는 메이저리그 구장의 역사"
+          width="560" height="315"
+          src="https://www.youtube.com/embed/3OkSW5qV7jQ"
+          frameborder="0" allowfullscreen>
+   </iframe>
+</div>
+
+# 무엇이 궁금한가
+```{r}
+embed_youtube("3OkSW5qV7jQ")
+#<iframe id="introduction" title="건축가가 설명하는 메이저리그 구장의 역사" src="https://www.youtube.com/embed/6A5EpqqDOdk" frameborder="0"></iframe>
+```
+
+```{r rmd style, include=FALSE, warning=FALSE}
+#폰트 설정
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#23395b",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono")
+)
+```
+
+# 데이터 & 전처리
+```{r cache  = TRUE}
+mlbpark <- read_sheet('https://docs.google.com/spreadsheets/d/1WLSVxzZw6Y9koMwyBn8PJiQXFER2mfI2B7jlICjlwz0/edit#gid=0')
+as_tibble(mlbpark)
+```
+
+```{r}
+mlbpark$Capacity <- mlbpark$Capacity %>% 
+  str_replace("\\[.*", "") %>% 
+  str_replace(",", "") %>% 
+  as.integer()
+
+mlbpark$Team <- mlbpark$Team %>% 
+  str_replace("\\[.*", "") 
+mlbpark$Type <- mlbpark$Type %>% 
+  str_replace("\\[.*", "") 
+mlbpark$Opened <- mlbpark$Opened %>% 
+  str_replace("\\[.*", "")
+mlbpark[, 6] <- lapply(mlbpark[, 6], 
+                         function(x) as.double(as.character(x)))
+```
+
+# 팀 고유색 더하기
+```{r cache = TRUE}
+mlb_color <- read_sheet('https://docs.google.com/spreadsheets/d/1BNosPtWPI9jFvc5Mro2mAWaKlV8R754w4uyfgOnyAuY/edit#gid=0')
+```
+```{r}
+skim(mlb_color$`Color 1`)
+n_distinct(mlb_color$`Color 1`)
+mlb_color%>% group_by(`Color 1`) %>%
+  summarize(n = n())
+```
+시카고 화이트삭스와 피츠버그 파이러츠의 팀 컬러가 검정색으로 겹친다는 것을 알 수 있다. /n 이를 해결하기 위하여 피츠버그를 두번째 팀컬러인 노란색으로 표현하기로 한다.
+
+```{r}
+#피츠버그의 색을 노란색으로
+mlb_color[mlb_color$`MLB Team Name`=="Pittsburgh Pirates", "Color 1"] <-  "Yellow #FDB827"
+mlbcolor <- mlb_color %>% select(c(1:2)) %>%
+  rename("Team" = 1, "colorcode" = 2)
+```
+
+
+```{r}
+mlbcolor$colorcode <- gsub(".*#", "#", mlbcolor$colorcode)
+mlb_1 <- mlbpark %>% left_join(mlbcolor, by="Team")
+mlbcolor$colorcode
+mlbcol <- unlist(mlbcolor$colorcode, use.names = mlbcolor$Team)
+mlbc <- setNames(as.character(mlbcolor$colorcode), 
+                   as.character(mlbcolor$Team))
+```
+```{r cache=TRUE}
+mlbc
+```
+  scale_fill_manual(values = as.character(df3$cat_cols))
+
+# 시각화 작업
+## 구장 수용인원 분석
+```{r}
+g1 <- mlb_1 %>% ggplot() +
+  geom_point(aes(x=Opened, y=Capacity, colour = factor(Team))) +
+  scale_x_continuous(expand = c(0,0),
+                     limits = c(1900, 2022),
+                     breaks = seq(1900, 2022, by = 10)) +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(20000, 60000),
+                     breaks = seq(20000, 60000, by = 5000)) +
+  labs(title="현재 쓰이는 MLB 구장의 건설연도와 수용인원") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.title = element_text(hjust = 0.5),
+        legend.position = "none") +
+  scale_colour_manual(values=c(mlbc))
+
+g1
+#colour = thematic::okabe_ito(8)[6],
+```
+```{r}
+mlbc
+```
+
+
+
+## 구장 건설비용 분석
+```{r}
+g2 <- mlbpark %>% ggplot() +
+  geom_point(aes(x=Opened, y=Cost, color=`Rooftype`)) +
+  scale_x_continuous(expand = c(0,0),
+                     limits = c(1900, 2022),
+                     breaks = seq(1900, 2022, by = 10)) +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0, 2500),
+                     breaks = seq(0, 2500, by = 500),
+                     labels = c("0", "5000억", "1조", "1조5천억", "2조", "2조5천억\n(원)")) +
+  labs(title="현재 쓰이는 MLB 구장의 건설연도와 건설비용") +
+  theme(legend.position = c(0.2, 0.7),
+        legend.background = element_rect(size=0.5, 
+                                         linetype="solid", 
+                                         colour ="darkblue"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+# guides(fill = guide_legend(nrow = 4, byrow = T))
+
+g2
+```
+## 구장 위치 분석
+### 구장 위치 좌표 크롤링
+
+```{r}
+# 함수 생성 전 연습
+url1 <- "https://en.wikipedia.org/wiki/American_Family_Field"
+webc <- rvest::read_html(url1)
+webc %>% 
+  rvest::html_nodes("td") %>%
+  rvest::html_text() -> webtd
+```
+
+
+```{r}
+coordinatetd <- webtd[grepl("Coordinates", webtd)]
+coord <- gsub("^.*\\Coor","Coor",coordinatetd)
+coor <- gsub("^.*\\°W / ","",coord)
+coor
+```
+
+```{r}
+# 함수 생성
+scrape_coordinate_wiki <- function(url) {
+  webc <- rvest::read_html(url)
+  webtd <- webc %>% 
+  rvest::html_nodes("td") %>%
+  rvest::html_text()
+  coordinatetd <- webtd[grepl("Coordinates", webtd)]
+  coord <- gsub("^.*\\Coor","Coor", coordinatetd)
+  coor <- gsub("^.*\\°W﻿ / ","", coord)
+  coordinate <- data.frame(
+    url = url,
+    coor = coor
+  )
+}
+  
+```
+
+
+````{r}
+mlb_2 <- mlb
+length(mlb$url)
+scrape_coordinate_wiki(mlb$url[2])
+urllist <-mlb$url
+length(urllist)
+```
+
+```{r}
+all_coord <- data.frame() 
+
+for (i in 1:length(urllist)) {
+  coordinate <- scrape_coordinate_wiki(urllist[i])
+  all_coord <- rbind(all_coord, coordinate)
+}
+
+all_coord
+```
+
+
+```{r}
+mlb_2.5 <- left_join(mlb, all_coord, by="url")
+```
+
+
+```{r}
+mlb_3 <- mlb_2.5 %>% separate(coor, c('coordX', 'coordY'), sep = ";")
+
+```
+
+### 개념 정의하기 : 연고지와 도심
+<p> 연고지를 어떻게 결정할 것인가? 가령 텍사스 레인저스의 홈구장은 Arlington에 위치해있지만, 구장을 방문하는 팬이 가장 많은 도시는 Dallas이다. 반대로 Los Angeles Angels는 Los Angeles를 팀명에 달고 있지만, 정작 Los Angeles에서는 큰 인기를 얻지 못하고 근교인 Orange County에 팬 베이스가 형성되어 있다. 이를 판단하기 위한 자료로서 <a href="https://www.nytimes.com/interactive/2014/04/24/upshot/facebook-baseball-map.html">뉴욕 타임즈에서 페이스북 검색 기록을 기반으로 분석한 MLB Fan Map (2014)</a>을 적극 참조했다. 이 지도를 기준으로 보았을 때, Angels는 Anaheim을 중심으로 팬층이 형성되어 있다는 것을 확인하였고, 연고지를 Anaheim으로 판단하였다.</p> 
+
+<p> 도심은 어떤 기준을 통해서 결정해야 할까? 시청이 위치한 곳? 가장 활발한 경제활동이 벌어지는 곳? 도시 원점? 부도심이 위치한 곳은? 광역 경제권이 형성되어 있는 곳은? 도시 중심에 대한 기준에 있어 다른 기준에 비해 가장 편차가 적은 시청사 소재 좌표를 도심의 기준으로 판단하되, 무시할 수 없는 오차를 고려해 범주형 데이터로서 참고하도록 한다.
+</p>
+
+
+```{r}
+cityhall <- read_excel("./geocode_comparison_v5.xlsx", sheet=2) %>% select(c(3,4,6,7))
+colnames(cityhall) <- c("GeographicArea", "Population2010", "hallcoordX", "hallcoordY")
+```
+
+
+```{r}
+# 연고지 정보 정리
+mlb_3$Basecity <-  mlb_3$Location %>% str_replace("\\,[^.]*$", "")
+```
+
+
+```{r}
+mlb_3$Basecity[mlb_3$Team=="New York Yankees"] <- "New York"
+mlb_3$Basecity[mlb_3$Team=="New York Mets"] <-  "New York"
+mlb_3$Basecity[mlb_3$Team=="Texas Rangers"] <-  "Dallas"
+mlb_3$Basecity[mlb_3$Team=="Atlanta Braves"] <-  "Atlanta"
+mlb_3$Basecity[mlb_3$Team=="Washington Nationals"] <-  "Washington"
+mlb_3$Basecity[mlb_3$Team=="Tampa Bay Rays"] <-  "Tampa"
+```
+
+
+```{r}
+mlb_3$GeographicArea <- paste(mlb_3$Basecity, "city")
+mlb_3$GeographicArea[mlb_3$Team=="Washington Nationals"] <- "Washington city, DC"
+mlb_3$GeographicArea[mlb_3$Team=="St. Louis Cardinals"] <-  "St. Louis city, MO"
+mlb_3$GeographicArea[mlb_3$Basecity=="New York"] <- "New York city, NY"
+mlb_3$GeographicArea[mlb_3$Basecity=="Chicago"] <- "Chicago city, IL"
+mlb_3$GeographicArea[mlb_3$Basecity=="Cincinnati"] <-  "Cincinnati city, OH"
+mlb_3$GeographicArea[mlb_3$Basecity=="Philadelphia"] <- "Philadelphia city, PA"
+mlb_3$GeographicArea[mlb_3$Basecity=="Boston"] <- "Boston city, MA"
+mlb_3$GeographicArea[mlb_3$Basecity=="Kansas City"] <- "Kansas City city, MO"
+mlb_3$GeographicArea[mlb_3$Basecity=="Minneapolis"] <- "Minneapolis city, MN"
+mlb_3$GeographicArea[mlb_3$Basecity=="Cleveland"] <- "Cleveland city, OH"
+```
+
+
+```{r}
+mlb_base <- mlb_3 %>% left_join(cityhall, by="GeographicArea")
+mlb_base[,c(15:19)] <- lapply(mlb_base[,c(15:19)], 
+                         function(x) as.double(as.character(x)))
+```
+### 지오코딩으로 나타내기
+```{r}
+#접속 가능 ip를 설정하여 무단 도용을 막자
+ggmap::register_google(key = "AIzaSyCQnWe8Pzy7Erl9t6Qcq5kqgri9tgrrrt4", write = TRUE)
+```
+
+```{r}
+map <- get_map(location='united states', 
+               zoom=4, maptype = "terrain",
+               source='google',color='color')
+```
+
+
+```{r}
+ggmap(map) + 
+  geom_point(data=mlb_base,
+             aes(x=coordY, y=coordX, 
+                 palette=colorcode),
+             size=3,
+             alpha = 1) + 
+  theme(legend.position = "none")
+```
+
+```{r}
+library(usmap)
+library(ggplot2)
+library(maps)
+us_states <- map_data("state")
+
+```
+```{r}
+p <- ggplot(data = us_states,
+            mapping = aes(x = long, y = lat,
+                          group = group, fill = region))
+
+statemap <- p + geom_polygon(color = "gray90", size = 0.1) +
+    coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+    guides(fill = FALSE)
+```
+
+```{r}
+statemap+ geom_point(data=mlb_base,
+             aes(x=coordY, y=coordX),
+             size=3,
+             alpha = 1) + 
+  theme(legend.position = "none")
+```
+
+
+### 거리 구하기
+```{r}
+mapdist
+```
+
+
+```{r}
+tas_utm <- st_crs("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs")
+stas2 <- st_transform(stas, crs = tas_utm)
+pts2 <- st_transform(pts, crs = tas_utm)
+tm_shape(stas2) +
+  tm_polygons() +
+  tm_graticules(col = "grey60") +
+  tm_shape(pts2) +
+  tm_symbols(col = "black") +
+  tm_scale_bar(position = c("left", "bottom")) +
+  tm_shape(pts) +
+  tm_text("pt", ymod = -1)
+```
+
+
+```{r}
+mykey = "AIzaSyBpkJubAqtwhJx0YRpDXEVR8Y9puaE6zf8" 
+
+register_google(key = mykey)
+```
+
+
+## 기초 인터랙티브
+```{r eval = FALSE}
+```
+
+
+
+# 결론 및 마무리
+## 이미지 저장
+```{r cache = TRUE}
+ggsave("./mlb_cap.svg", g1)
+ggsave("./mlb_cost.svg", g2)
+```
+
+## 파일 저장
+```{r}
+write.csv(mlb_base, "./mlb_stadium.csv")
+```
+
+
+finalise_plot(plot_name, source_name, save_filepath, width_pixels, height_pixels, logo_image_path)
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+

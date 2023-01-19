@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Major League Ballparks</name>
+    <description><![CDATA[Location of all Major League Ballparks<br>- AL West - Red Dot<br>- AL Central - Yellow Dot<br>- AL East - Blue Dot<br>- NL West - Red<br>- NL Central - Yellow<br>- NL East - Blue]]></description>
+    <Style id="icon-123-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/123-red-dot.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-123-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/123-red-dot.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-123">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-123-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-123-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-124-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/124-red.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-124-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/124-red.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-124">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-124-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-124-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-157-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/157-yellow-dot.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-157-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/157-yellow-dot.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-157">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-157-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-157-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-158-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/158-yellow.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-158-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/158-yellow.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-158">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-158-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-158-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-22-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/22-blue-dot.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-22-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/22-blue-dot.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-22">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-22-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-22-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-24-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/24-blue.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-24-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/24-blue.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-24">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-24-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-24-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Untitled layer</name>
+      <Placemark>
+        <name>T-Mobile Park</name>
+        <description><![CDATA[Seattle Mariners<br>T-Mobile Park<br>1250 First Avenue South<br>Seattle, WA 98134]]></description>
+        <styleUrl>#icon-123</styleUrl>
+        <Point>
+          <coordinates>
+            -122.332888,47.591117,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>RingCentral Coliseum
+</name>
+        <description><![CDATA[Oakland Athletics<br>RingCentral Coliseum<br>7000 Coliseum Way<br>Oakland, CA 94621]]></description>
+        <styleUrl>#icon-123</styleUrl>
+        <Point>
+          <coordinates>
+            -122.201059,37.751325,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Angel Stadium</name>
+        <description><![CDATA[Los Angeles Angels<br>Angel Stadium<br>2000 Gene Autry Way<br>Anaheim, CA 92806]]></description>
+        <styleUrl>#icon-123</styleUrl>
+        <Point>
+          <coordinates>
+            -117.883151,33.799914,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Globe Life Field</name>
+        <description><![CDATA[Texas Rangers<br>Globe Life Field<br>1000 Ballpark Way<br>Arlington, TX 76011]]></description>
+        <styleUrl>#icon-123</styleUrl>
+        <Point>
+          <coordinates>
+            -97.0841621,32.7476267,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Minute Maid Park</name>
+        <description><![CDATA[Houston Astros<br>Minute Maid Park<br>501 Crawford Street<br>Houston, TX 77002]]></description>
+        <styleUrl>#icon-123</styleUrl>
+        <Point>
+          <coordinates>
+            -95.355567,29.756726,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Target Field</name>
+        <description><![CDATA[Minnesota Twins<br>Target Field<br>1 Twins Way<br>Minneapolis, MN 55403]]></description>
+        <styleUrl>#icon-157</styleUrl>
+        <Point>
+          <coordinates>
+            -93.278153,44.981724,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Comerica Park</name>
+        <description><![CDATA[Detroit Tigers<br>Comerica Park<br>2100 Woodward Ave<br>Detroit, MI 48201]]></description>
+        <styleUrl>#icon-157</styleUrl>
+        <Point>
+          <coordinates>
+            -83.048948,42.339444,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Guaranteed Rate Field</name>
+        <description><![CDATA[Chicago White Sox<br>Guaranteed Rate Field<br>333 W. 35th Street<br>Chicago, IL 60616]]></description>
+        <styleUrl>#icon-157</styleUrl>
+        <Point>
+          <coordinates>
+            -87.63423,41.830182,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Progressive Field</name>
+        <description><![CDATA[Cleveland Guardians<br>Progressive Field<br>2401 Ontario St<br>Cleveland, OH 44115]]></description>
+        <styleUrl>#icon-157</styleUrl>
+        <Point>
+          <coordinates>
+            -81.685306,41.495556,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kauffman Stadium</name>
+        <description><![CDATA[Kansas City Royals<br>Kauffman Stadium<br>1 Royal Way<br>Kansas City, MO 64129]]></description>
+        <styleUrl>#icon-157</styleUrl>
+        <Point>
+          <coordinates>
+            -94.480845,39.051194,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rogers Centre</name>
+        <description><![CDATA[Toronto Blue Jays<br>Rogers Centre<br>1 Blue Jay's Way<br>Toronto, On M5V 1J1]]></description>
+        <styleUrl>#icon-22</styleUrl>
+        <Point>
+          <coordinates>
+            -79.389009,43.641068,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Fenway Park</name>
+        <description><![CDATA[Boston Red Sox<br>Fenway Park<br>4 Jersey Street  <br>Boston, MA 02215]]></description>
+        <styleUrl>#icon-22</styleUrl>
+        <Point>
+          <coordinates>
+            -71.097766,42.346236,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Yankee Stadium</name>
+        <description><![CDATA[New York Yankees<br>Yankee Stadium<br>One East 161st Street<br>Bronx, New York 10451]]></description>
+        <styleUrl>#icon-22</styleUrl>
+        <Point>
+          <coordinates>
+            -73.927013,40.829463,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Oriole Park at Camden Yards</name>
+        <description><![CDATA[Baltimore Orioles<br>Oriole Park at Camden Yards<br>333 West Camden Street<br>Baltimore, MD 21201]]></description>
+        <styleUrl>#icon-22</styleUrl>
+        <Point>
+          <coordinates>
+            -76.621911,39.28351,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tropicana Field</name>
+        <description><![CDATA[Tampa Bay Rays<br>Tropicana Field<br>1 Tropicana Drive<br>St. Petersburg, FL 33705]]></description>
+        <styleUrl>#icon-22</styleUrl>
+        <Point>
+          <coordinates>
+            -82.653521,27.768255,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Coors Field</name>
+        <description><![CDATA[Colorado Rockies<br>Coors Field<br>2001 Blake St<br>Denver, CO 80205]]></description>
+        <styleUrl>#icon-124</styleUrl>
+        <Point>
+          <coordinates>
+            -104.994187,39.755714,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Oracle Park</name>
+        <description><![CDATA[San Francisco Giants<br>Oracle Park<br>24 Willie Mays Plaza<br>San Francisco, CA 94107]]></description>
+        <styleUrl>#icon-124</styleUrl>
+        <Point>
+          <coordinates>
+            -122.389895,37.778362,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Dodger Stadium</name>
+        <description><![CDATA[Los Angeles Dodgers<br>Dodger Stadium<br>1000 Vin Scully Avenue<br>Los Angeles, CA 90012]]></description>
+        <styleUrl>#icon-124</styleUrl>
+        <Point>
+          <coordinates>
+            -118.240208,34.07343,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Chase Field</name>
+        <description><![CDATA[Arizona Diamondbacks<br>Chase Field<br>401 East Jefferson Street<br>Phoenix, AZ 85004]]></description>
+        <styleUrl>#icon-124</styleUrl>
+        <Point>
+          <coordinates>
+            -112.06685,33.445238,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Petco Park</name>
+        <description><![CDATA[San Diego Padres<br>Petco Park<br>100 Park Boulevard<br>San Diego, CA 92101]]></description>
+        <styleUrl>#icon-124</styleUrl>
+        <Point>
+          <coordinates>
+            -117.157051,32.707045,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>American Family Field</name>
+        <description><![CDATA[Milwaukee Brewers<br>American Family Field<br>One Brewers Way<br>Milwaukee, WI 53214]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            -87.9716168,43.0284126,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Wrigley Field</name>
+        <description><![CDATA[Chicago Cubs<br>Wrigley Field<br>1060 West Addison St.<br>Chicago, IL 60613]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            -87.6557959,41.947906,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>PNC Park</name>
+        <description><![CDATA[Pittsburgh Pirates<br>PNC Park<br>115 Federal Street<br>Pittsburgh, PA 15212]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            -80.0061733,40.4470537,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Great American Ball Park</name>
+        <description><![CDATA[Cincinnati Reds<br>Great American Ball Park<br>100 Joe Nuxhall Way<br>Cincinnati, OH 45202]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            -84.507034,39.097487,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Busch Stadium</name>
+        <description><![CDATA[St. Louis Cardinals<br>Busch Stadium<br>700 Clark Street<br>St. Louis, MO 63102]]></description>
+        <styleUrl>#icon-158</styleUrl>
+        <Point>
+          <coordinates>
+            -90.193382,38.622399,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Citi Field</name>
+        <description><![CDATA[New York Mets<br>Citi Field<br>41 Seaver Way<br>Flushing, NY 11368]]></description>
+        <styleUrl>#icon-24</styleUrl>
+        <Point>
+          <coordinates>
+            -73.8460203,40.7565707,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Citizens Bank Park</name>
+        <description><![CDATA[Philadelphia Phillies<br>Citizens Bank Park<br>1 Citizens Bank Way<br>Philadelphia, PA 19148]]></description>
+        <styleUrl>#icon-24</styleUrl>
+        <Point>
+          <coordinates>
+            -75.1666,39.905574,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Nationals Park</name>
+        <description><![CDATA[Washington Nationals<br>Nationals Park<br>1500 South Capitol Street SE<br>Washington, DC 20003]]></description>
+        <styleUrl>#icon-24</styleUrl>
+        <Point>
+          <coordinates>
+            -77.0077305,38.8725548,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Truist Park</name>
+        <description><![CDATA[Atlanta Braves<br>Truist Park<br>755 Battery Avenue Southeast<br>Atlanta, GA 30339]]></description>
+        <styleUrl>#icon-24</styleUrl>
+        <Point>
+          <coordinates>
+            -84.4678657,33.8910976,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>loanDepot Park
+</name>
+        <description><![CDATA[Florida Marlins<br>loanDepot Park<br>501 Marlins Way<br>Miami, FL 33125]]></description>
+        <styleUrl>#icon-24</styleUrl>
+        <Point>
+          <coordinates>
+            -80.2203184,25.7787689,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
