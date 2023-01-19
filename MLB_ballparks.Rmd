@@ -1,6 +1,6 @@
 ---
-title: "메이저리그 구장의 변화"
-subtitle: "좌석은 적게, 도심과는 가깝게"
+title: "메이저리그 구장의 변화 시각화"
+subtitle: "수용좌석, 건설비용, 도심접근성을 중심으로"
 author: "윤준식"
 date: "`r format(Sys.Date())`" 
 tags: [MLB, ballpark, USsports]
@@ -14,6 +14,9 @@ output:
     toc_depth: 3
     toc_float: yes
     self_contained: false
+header-includes:
+  - \usepackage{fontspec}
+  - \setmainfont{Times New Roman}
 ---
 
 # 라이브러리 설정
@@ -36,12 +39,13 @@ library(geosphere)
 library(leaflet)
 library(ggmap)
 library(htmltools)
+library(stringi)
 klippy::klippy()
 options(scipen=999)
 setwd(".")
 getwd()
 ```
-
+# 무엇이 궁금한가
 
 <div align="left">
   <iframe id="introduction" 
@@ -50,13 +54,8 @@ getwd()
           src="https://www.youtube.com/embed/3OkSW5qV7jQ"
           frameborder="0" allowfullscreen>
    </iframe>
-</div>
+</div> 
 
-# 무엇이 궁금한가
-```{r}
-embed_youtube("3OkSW5qV7jQ")
-#<iframe id="introduction" title="건축가가 설명하는 메이저리그 구장의 역사" src="https://www.youtube.com/embed/6A5EpqqDOdk" frameborder="0"></iframe>
-```
 
 ```{r rmd style, include=FALSE, warning=FALSE}
 #폰트 설정
@@ -70,7 +69,7 @@ style_mono_accent(
 ```
 
 # 데이터 & 전처리
-```{r cache  = TRUE}
+```{r}
 mlbpark <- read_sheet('https://docs.google.com/spreadsheets/d/1WLSVxzZw6Y9koMwyBn8PJiQXFER2mfI2B7jlICjlwz0/edit#gid=0')
 as_tibble(mlbpark)
 ```
@@ -92,7 +91,7 @@ mlbpark[, 6] <- lapply(mlbpark[, 6],
 ```
 
 # 팀 고유색 더하기
-```{r cache = TRUE}
+```{r}
 mlb_color <- read_sheet('https://docs.google.com/spreadsheets/d/1BNosPtWPI9jFvc5Mro2mAWaKlV8R754w4uyfgOnyAuY/edit#gid=0')
 ```
 ```{r}
@@ -153,7 +152,7 @@ mlbc
 
 ## 구장 건설비용 분석
 ```{r}
-g2 <- mlbpark %>% ggplot() +
+g2 <- mlb_1 %>% ggplot() +
   geom_point(aes(x=Opened, y=Cost, color=`Rooftype`)) +
   scale_x_continuous(expand = c(0,0),
                      limits = c(1900, 2022),
@@ -174,6 +173,8 @@ g2 <- mlbpark %>% ggplot() +
 
 g2
 ```
+
+
 ## 구장 위치 분석
 ### 구장 위치 좌표 크롤링
 
@@ -190,7 +191,7 @@ webc %>%
 ```{r}
 coordinatetd <- webtd[grepl("Coordinates", webtd)]
 coord <- gsub("^.*\\Coor","Coor",coordinatetd)
-coor <- gsub("^.*\\°W / ","",coord)
+coor <- gsub("\\°W﻿ /.^*","",coord)
 coor
 ```
 
@@ -202,8 +203,8 @@ scrape_coordinate_wiki <- function(url) {
   rvest::html_nodes("td") %>%
   rvest::html_text()
   coordinatetd <- webtd[grepl("Coordinates", webtd)]
-  coord <- gsub("^.*\\Coor","Coor", coordinatetd)
-  coor <- gsub("^.*\\°W﻿ / ","", coord)
+  coord <- gsub("^.*\\Coor","Coor",coordinatetd)
+  coor <- gsub("^.*\\°W / ","",coord)
   coordinate <- data.frame(
     url = url,
     coor = coor
@@ -213,12 +214,11 @@ scrape_coordinate_wiki <- function(url) {
 ```
 
 
-````{r}
-mlb_2 <- mlb
-length(mlb$url)
-scrape_coordinate_wiki(mlb$url[2])
-urllist <-mlb$url
-length(urllist)
+```{r}
+length(mlb_1$url)
+scrape_coordinate_wiki(mlb_1$url[2])
+urllist <-mlb_1$url
+nrow(urllist)
 ```
 
 ```{r}
@@ -234,13 +234,14 @@ all_coord
 
 
 ```{r}
-mlb_2.5 <- left_join(mlb, all_coord, by="url")
+mlb_2 <- left_join(mlb_1, all_coord, by="url")
+mlb_2
 ```
 
 
 ```{r}
-mlb_3 <- mlb_2.5 %>% separate(coor, c('coordY', 'coordX'), sep = ";")
-
+mlb_3 <- mlb_2 %>% separate(coor, c('coordY', 'coordX'), sep = ";")
+DT::datatable(mlb_3)
 ```
 
 ### 개념 정의하기 : 연고지와 도심
@@ -284,13 +285,21 @@ mlb_3$GeographicArea[mlb_3$Basecity=="Boston"] <- "Boston city, MA"
 mlb_3$GeographicArea[mlb_3$Basecity=="Kansas City"] <- "Kansas City city, MO"
 mlb_3$GeographicArea[mlb_3$Basecity=="Minneapolis"] <- "Minneapolis city, MN"
 mlb_3$GeographicArea[mlb_3$Basecity=="Cleveland"] <- "Cleveland city, OH"
+mlb_3
 ```
 
 
 ```{r}
 mlb_base <- mlb_3 %>% left_join(cityhall, by="GeographicArea")
-mlb_base[,c(15:19)] <- lapply(mlb_base[,c(15:19)], 
-                         function(x) as.double(as.character(x)))
+mlb_base
+```
+
+
+```{r}
+mlb_base[,c("coordX", "coordY", "hallcoordX", "hallcoordY", "Population2010")] <- 
+  lapply(mlb_base[,c("coordX", "coordY", "hallcoordX", "hallcoordY", "Population2010")], function(x) as.double(as.character(x)))
+
+DT::datatable(mlb_base)
 ```
 ### 지오코딩으로 나타내기
 ```{r}
@@ -298,20 +307,6 @@ mlb_base[,c(15:19)] <- lapply(mlb_base[,c(15:19)],
 ggmap::register_google(key = "AIzaSyCQnWe8Pzy7Erl9t6Qcq5kqgri9tgrrrt4", write = TRUE)
 ```
 
-```{r}
-map <- get_map(location='united states', 
-               zoom=4, maptype = "terrain",
-               source='google',color='color')
-```
-
-
-```{r}
-library(usmap)
-library(ggplot2)
-library(maps)
-us_states <- map_data("state")
-
-```
 
 
 ```{r}
@@ -340,13 +335,12 @@ city_info <-
 
 ```{r}
 mlbmap <- us1 |> addCircleMarkers(~coordX, ~coordY,
-                          color=mlb$colorcode,
+                          color=mlb_base$colorcode,
                           radius = 4,
                           fillOpacity = 1,
                           stroke = F,
                           popup=~park_info
                           )
-
 mlbmap
 ```
 
@@ -365,66 +359,94 @@ mlbmap |> addAwesomeMarkers(~hallcoordX, ~hallcoordY,
                         )
 ```
 
-
-```{r}
-```
-```{r}
-pal <- colorFactor(c("navy", "red"), domain = c("ship", "pirate"))
-```
-
-
-```{r}
-statemap <- p + geom_polygon(color = "gray90", size = 0.1) +
-    coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
-    guides(fill = FALSE)
-```
-
-
-```{r}
-statemap+ geom_point(data=mlb_base,
-             aes(x=coordY, y=coordX),
-             size=3,
-             alpha = 1) + 
-  theme(legend.position = "none")
-```
-
-
 ### 거리 구하기
 ```{r}
-mapdist
+mlb_dist <- mlb_base %>% 
+  transmute(Team, 
+            "park_coord" = paste0(mlb_base$coordY, ", ", mlb_base$coordX),
+            "hall_coord" = paste0(mlb_base$hallcoordY, ", ",  mlb_base$hallcoordX))
+nrow(mlb_dist)
 ```
 
 
 ```{r}
-tas_utm <- st_crs("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs")
-stas2 <- st_transform(stas, crs = tas_utm)
-pts2 <- st_transform(pts, crs = tas_utm)
-tm_shape(stas2) +
-  tm_polygons() +
-  tm_graticules(col = "grey60") +
-  tm_shape(pts2) +
-  tm_symbols(col = "black") +
-  tm_scale_bar(position = c("left", "bottom")) +
-  tm_shape(pts) +
-  tm_text("pt", ymod = -1)
+dist <- data.frame()
+for (i in 1:nrow(mlb_dist)) {
+  distance <- ggmap::mapdist(from = mlb_dist$park_coord[i],
+                             to = mlb_dist$hall_coord[i]
+                            )
+  dist <- bind_rows(dist, distance)
+}
+
+dist
 ```
 
 
 ```{r}
-mykey = "AIzaSyBpkJubAqtwhJx0YRpDXEVR8Y9puaE6zf8" 
-
-register_google(key = mykey)
+mlb_dist_1 <- mlb_dist %>% left_join(dist,by=c("park_coord"="from", "hall_coord" ="to"))  %>%
+  select(c(1,2,3,"km", "minutes"))
+mlb_stad <- mlb_base %>% left_join(mlb_dist_1, by="Team")
+```
+```{r}
+addkm <- function(x, ...)
+    format(paste0(x, "km"), ...)
+addmin <- function(x, ...)
+    format(paste0(x, "분"), ...)
+addyear <- function(x, ...)
+    format(paste0(x, "년"), ...)
 ```
 
 
-## 기초 인터랙티브
-```{r eval = FALSE}
+```{r}
+g3 <- mlb_stad %>% ggplot() +
+  geom_point(aes(x=Opened, y=km, color=`Rooftype`)) +
+  scale_x_continuous(expand = c(0,0),
+                     limits = c(1900, 2022),
+                     breaks = seq(1900, 2022, by = 10),
+                     labels = addyear) +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0,40),
+                     breaks = seq(0, 40, by = 5)) +
+  labs(title="현재 쓰이는 MLB 구장의 도심으로부터의 거리(KM)") +
+  theme(legend.position = c(0.2, 0.7),
+        legend.background = element_rect(size=0.5, 
+                                         linetype="solid", 
+                                         colour ="darkblue"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
+g3
 ```
 
+1990년대 지어진 구장들이 도심으로부터 15km 내에 주로 위치한 반면에,2000년대 수반부터 다시 20km 이상 떨어진 구장들이 등장하는 것을 알 수 있다.
 
+```{r}
+g4 <- mlb_stad %>% ggplot() +
+  geom_point(aes(x=Opened, y=minutes, color=`Rooftype`)) +
+  scale_x_continuous(expand = c(0,0),
+                     limits = c(1900, 2022),
+                     breaks = seq(1900, 2022, by = 10),
+                     labels = addyear) +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0, 35),
+                     breaks = seq(0, 35, by = 5),
+                     labels = addmin) +
+  labs(title="현재 쓰이는 MLB 구장의 도심으로부터의 거리(운전시간)") +
+  theme(legend.position = c(0.2, 0.7),
+        legend.background = element_rect(size=0.5, 
+                                         linetype="solid", 
+                                         colour ="darkblue"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
 
+g4
+```
+도심으로부터 운전 시간 역시, 점차 증가하는 것을 알 수 있다.
 # 결론 및 마무리
 ## 이미지 저장
+
 ```{r cache = TRUE}
 ggsave("./mlb_cap.svg", g1)
 ggsave("./mlb_cost.svg", g2)
@@ -432,12 +454,8 @@ ggsave("./mlb_cost.svg", g2)
 
 ## 파일 저장
 ```{r}
-write.csv(mlb_base, "./mlb_stadium.csv")
+write.csv(mlb_stad, "./mlb_stadium.csv")
 ```
-
-
-finalise_plot(plot_name, source_name, save_filepath, width_pixels, height_pixels, logo_image_path)
-
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
