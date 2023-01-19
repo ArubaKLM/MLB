@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="윤준식" />
+
+<meta name="date" content="2023-01-18" />
+
+<title>메이저리그 구장들 분석</title>
+
+<script src="MLB_ballparks_files/header-attrs-2.19/header-attrs.js"></script>
+<script src="MLB_ballparks_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="MLB_ballparks_files/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="MLB_ballparks_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="MLB_ballparks_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="MLB_ballparks_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="MLB_ballparks_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="MLB_ballparks_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="MLB_ballparks_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="MLB_ballparks_files/navigation-1.1/tabsets.js"></script>
+<script src="MLB_ballparks_files/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="MLB_ballparks_files/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="MLB_ballparks_files/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="MLB_ballparks_files/klippy-0.0.0.9500/js/klippy.min.js"></script>
+<link href="MLB_ballparks_files/vembedr-0.1.5/css/vembedr.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">메이저리그 구장들 분석</h1>
+<h3 class="subtitle">크기, 비용, 위치</h3>
+<h4 class="author">윤준식</h4>
+<h4 class="date">2023-01-18</h4>
+
+</div>
+
+
+<div id="라이브러리-설정" class="section level1">
+<h1>라이브러리 설정</h1>
+<div align="left">
+<p><iframe id="introduction" 
+          title="건축가가 설명하는 메이저리그 구장의 역사"
+          width="560" height="315"
+          src="https://www.youtube.com/embed/3OkSW5qV7jQ"
+          frameborder="0" allowfullscreen> </iframe></p>
+</div>
+</div>
+<div id="무엇이-궁금한가" class="section level1">
+<h1>무엇이 궁금한가</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">embed_youtube</span>(<span class="st">&quot;3OkSW5qV7jQ&quot;</span>)</span></code></pre></div>
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/3OkSW5qV7jQ" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&lt;iframe id=&quot;introduction&quot; title=&quot;건축가가 설명하는 메이저리그 구장의 역사&quot; src=&quot;https://www.youtube.com/embed/6A5EpqqDOdk&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;</span></span></code></pre></div>
+</div>
+<div id="데이터-전처리" class="section level1">
+<h1>데이터 &amp; 전처리</h1>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mlbpark <span class="ot">&lt;-</span> <span class="fu">read_sheet</span>(<span class="st">&#39;https://docs.google.com/spreadsheets/d/1WLSVxzZw6Y9koMwyBn8PJiQXFER2mfI2B7jlICjlwz0/edit#gid=0&#39;</span>)</span></code></pre></div>
+<pre><code>## ! Using an auto-discovered, cached token.</code></pre>
+<pre><code>##   To suppress this message, modify your code or options to clearly consent to
+##   the use of a cached token.</code></pre>
+<pre><code>##   See gargle&#39;s &quot;Non-interactive auth&quot; vignette for more details:</code></pre>
+<pre><code>##   &lt;]8;;https://gargle.r-lib.org/articles/non-interactive-auth.htmlhttps://gargle.r-lib.org/articles/non-interactive-auth.html]8;;&gt;</code></pre>
+<pre><code>## i The googlesheets4 package is using a cached token for &#39;]8;;mailto:pancake15@snu.ac.krpancake15@snu.ac.kr]8;;&#39;.</code></pre>
+<pre><code>## v Reading from &quot;ballparklist_mlb&quot;.</code></pre>
+<pre><code>## v Range &#39;시트1&#39;.</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(mlbpark)</span></code></pre></div>
+<pre><code>## # A tibble: 30 x 11
+##    Name  Capac~1 Locat~2 Surface Team  Opened Dista~3 Type  Rooft~4   Cost url  
+##    &lt;chr&gt; &lt;list&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;list&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;
+##  1 Amer~ &lt;chr&gt;   Milwau~ Grass   Milw~ &lt;dbl&gt;  400 fe~ &quot;Ret~ Retrac~ 400    http~
+##  2 Ange~ &lt;chr&gt;   Anahei~ Grass   Los ~ &lt;dbl&gt;  396 fe~ &quot;Mod~ Open     24    http~
+##  3 Busc~ &lt;chr&gt;   St. Lo~ Grass   St. ~ &lt;dbl&gt;  400 fe~ &quot;Ret~ Open    365    http~
+##  4 Chas~ &lt;chr&gt;   Phoeni~ Artifi~ Ariz~ &lt;dbl&gt;  407 fe~ &quot;Ret~ Retrac~ 354    http~
+##  5 Citi~ &lt;chr&gt;   Queens~ Grass   New ~ &lt;dbl&gt;  408 fe~ &quot;Ret~ Open    900    http~
+##  6 Citi~ &lt;chr&gt;   Philad~ Grass   Phil~ &lt;dbl&gt;  401 fe~ &quot;Ret~ Open    458    http~
+##  7 Come~ &lt;chr&gt;   Detroi~ Grass   Detr~ &lt;dbl&gt;  420 fe~ &quot;Ret~ Open    300    http~
+##  8 Coor~ &lt;chr&gt;   Denver~ Grass   Colo~ &lt;dbl&gt;  415 fe~ &quot;Ret~ Open    300    http~
+##  9 Dodg~ &lt;chr&gt;   Los An~ Grass   Los ~ &lt;dbl&gt;  395 fe~ &quot;Mod~ Open     23    http~
+## 10 Fenw~ &lt;chr&gt;   Boston~ Grass   Bost~ &lt;dbl&gt;  390 fe~ &quot;Jew~ Open      0.65 http~
+## # ... with 20 more rows, and abbreviated variable names 1: Capacity,
+## #   2: Location, 3: `Distance to center field`, 4: Rooftype</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mlbpark<span class="sc">$</span>Capacity <span class="ot">&lt;-</span> mlbpark<span class="sc">$</span>Capacity <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">[.*&quot;</span>, <span class="st">&quot;&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace</span>(<span class="st">&quot;,&quot;</span>, <span class="st">&quot;&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.integer</span>()</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>mlbpark<span class="sc">$</span>Team <span class="ot">&lt;-</span> mlbpark<span class="sc">$</span>Team <span class="sc">%&gt;%</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">[.*&quot;</span>, <span class="st">&quot;&quot;</span>) </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>mlbpark<span class="sc">$</span>Type <span class="ot">&lt;-</span> mlbpark<span class="sc">$</span>Type <span class="sc">%&gt;%</span> </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">[.*&quot;</span>, <span class="st">&quot;&quot;</span>) </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>mlbpark<span class="sc">$</span>Opened <span class="ot">&lt;-</span> mlbpark<span class="sc">$</span>Opened <span class="sc">%&gt;%</span> </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">[.*&quot;</span>, <span class="st">&quot;&quot;</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>mlbpark[, <span class="dv">6</span>] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(mlbpark[, <span class="dv">6</span>], </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                         <span class="cf">function</span>(x) <span class="fu">as.double</span>(<span class="fu">as.character</span>(x)))</span></code></pre></div>
+</div>
+<div id="고유색-더하기" class="section level1">
+<h1>고유색 더하기</h1>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mlb_color <span class="ot">&lt;-</span> <span class="fu">read_sheet</span>(<span class="st">&#39;https://docs.google.com/spreadsheets/d/1BNosPtWPI9jFvc5Mro2mAWaKlV8R754w4uyfgOnyAuY/edit#gid=0&#39;</span>)</span></code></pre></div>
+<pre><code>## v Reading from &quot;mlb_team_color&quot;.</code></pre>
+<pre><code>## v Range &#39;시트1&#39;.</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(mlb_color<span class="sc">$</span><span class="st">`</span><span class="at">Color 1</span><span class="st">`</span>)</span></code></pre></div>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">mlb_color$Color 1</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">30</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<colgroup>
+<col width="19%" />
+<col width="13%" />
+<col width="19%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="12%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">data</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">11</td>
+<td align="right">23</td>
+<td align="right">0</td>
+<td align="right">29</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n_distinct</span>(mlb_color<span class="sc">$</span><span class="st">`</span><span class="at">Color 1</span><span class="st">`</span>)</span></code></pre></div>
+<pre><code>## [1] 29</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mlb_color<span class="sc">%&gt;%</span> <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Color 1</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>())</span></code></pre></div>
+<pre><code>## # A tibble: 29 x 2
+##    `Color 1`               n
+##    &lt;chr&gt;               &lt;int&gt;
+##  1 Black #27251F           2
+##  2 Blue #002D72            1
+##  3 Blue #003087            1
+##  4 Blue #003263            1
+##  5 Blue #003278            1
+##  6 Blue #0E3386            1
+##  7 Blue #134A8E            1
+##  8 Brown #2F241D           1
+##  9 Dodger Blue #005A9C     1
+## 10 Green #003831           1
+## # ... with 19 more rows</code></pre>
+<p>시카고 화이트삭스와 피츠버그 파이러츠의 팀 컬러가 검정색으로 겹친다는
+것을 알 수 있다. /n 이를 해결하기 위하여 피츠버그를 두번째 팀컬러인
+노란색으로 표현하기로 한다.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#피츠버그의 색을 노란색으로</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mlb_color[mlb_color<span class="sc">$</span><span class="st">`</span><span class="at">MLB Team Name</span><span class="st">`</span><span class="sc">==</span><span class="st">&quot;Pittsburgh Pirates&quot;</span>, <span class="st">&quot;Color 1&quot;</span>] <span class="ot">&lt;-</span>  <span class="st">&quot;Yellow #FDB827&quot;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>mlbcolor <span class="ot">&lt;-</span> mlb_color <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">&quot;Team&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;colorcode&quot;</span> <span class="ot">=</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>mlbcolor<span class="sc">$</span>colorcode <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;.*#&quot;</span>, <span class="st">&quot;#&quot;</span>, mlbcolor<span class="sc">$</span>colorcode)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>mlb <span class="ot">&lt;-</span> mlbpark <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(mlbcolor, <span class="at">by=</span><span class="st">&quot;Team&quot;</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>mlbcolor<span class="sc">$</span>colorcode</span></code></pre></div>
+<pre><code>##  [1] &quot;#A71930&quot; &quot;#CE1141&quot; &quot;#DF4601&quot; &quot;#BD3039&quot; &quot;#0E3386&quot; &quot;#27251F&quot; &quot;#C6011F&quot;
+##  [8] &quot;#00385D&quot; &quot;#333366&quot; &quot;#0C2340&quot; &quot;#002D62&quot; &quot;#004687&quot; &quot;#003263&quot; &quot;#005A9C&quot;
+## [15] &quot;#00A3E0&quot; &quot;#12284B&quot; &quot;#002B5C&quot; &quot;#002D72&quot; &quot;#003087&quot; &quot;#003831&quot; &quot;#E81828&quot;
+## [22] &quot;#FDB827&quot; &quot;#2F241D&quot; &quot;#FD5A1E&quot; &quot;#0C2C56&quot; &quot;#C41E3A&quot; &quot;#092C5C&quot; &quot;#003278&quot;
+## [29] &quot;#134A8E&quot; &quot;#AB0003&quot;</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mlbcol <span class="ot">&lt;-</span> <span class="fu">unlist</span>(mlbcolor<span class="sc">$</span>colorcode, <span class="at">use.names =</span> mlbcolor<span class="sc">$</span>Team)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>mlbc <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="fu">as.character</span>(mlbcolor<span class="sc">$</span>colorcode), </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">as.character</span>(mlbcolor<span class="sc">$</span>Team))</span></code></pre></div>
+</div>
+<div id="파일-저장" class="section level1">
+<h1>파일 저장</h1>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mlbc</span></code></pre></div>
+<pre><code>##  Arizona Diamondbacks        Atlanta Braves     Baltimore Orioles 
+##             &quot;#A71930&quot;             &quot;#CE1141&quot;             &quot;#DF4601&quot; 
+##        Boston Red Sox          Chicago Cubs     Chicago White Sox 
+##             &quot;#BD3039&quot;             &quot;#0E3386&quot;             &quot;#27251F&quot; 
+##       Cincinnati Reds   Cleveland Guardians      Colorado Rockies 
+##             &quot;#C6011F&quot;             &quot;#00385D&quot;             &quot;#333366&quot; 
+##        Detroit Tigers        Houston Astros    Kansas City Royals 
+##             &quot;#0C2340&quot;             &quot;#002D62&quot;             &quot;#004687&quot; 
+##    Los Angeles Angels   Los Angeles Dodgers         Miami Marlins 
+##             &quot;#003263&quot;             &quot;#005A9C&quot;             &quot;#00A3E0&quot; 
+##     Milwaukee Brewers       Minnesota Twins         New York Mets 
+##             &quot;#12284B&quot;             &quot;#002B5C&quot;             &quot;#002D72&quot; 
+##      New York Yankees     Oakland Athletics Philadelphia Phillies 
+##             &quot;#003087&quot;             &quot;#003831&quot;             &quot;#E81828&quot; 
+##    Pittsburgh Pirates      San Diego Padres  San Francisco Giants 
+##             &quot;#FDB827&quot;             &quot;#2F241D&quot;             &quot;#FD5A1E&quot; 
+##      Seattle Mariners   St. Louis Cardinals        Tampa Bay Rays 
+##             &quot;#0C2C56&quot;             &quot;#C41E3A&quot;             &quot;#092C5C&quot; 
+##         Texas Rangers     Toronto Blue Jays  Washington Nationals 
+##             &quot;#003278&quot;             &quot;#134A8E&quot;             &quot;#AB0003&quot;</code></pre>
+<p>scale_fill_manual(values = as.character(df3$cat_cols))</p>
+</div>
+<div id="시각화-작업" class="section level1">
+<h1>시각화 작업</h1>
+<div id="구장-수용인원-분석" class="section level2">
+<h2>구장 수용인원 분석</h2>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> mlb <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>Opened, <span class="at">y=</span>Capacity, <span class="at">colour =</span> <span class="fu">factor</span>(Team))) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1900</span>, <span class="dv">2022</span>),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1900</span>, <span class="dv">2022</span>, <span class="at">by =</span> <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">20000</span>, <span class="dv">60000</span>),</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">20000</span>, <span class="dv">60000</span>, <span class="at">by =</span> <span class="dv">5000</span>)) <span class="sc">+</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">&quot;현재 쓰이는 MLB 구장의 건설연도와 수용인원&quot;</span>) <span class="sc">+</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values=</span><span class="fu">c</span>(mlbc))</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>g1</span></code></pre></div>
+<p><img src="MLB_ballparks_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#colour = thematic::okabe_ito(8)[6],</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mlbc</span></code></pre></div>
+<pre><code>##  Arizona Diamondbacks        Atlanta Braves     Baltimore Orioles 
+##             &quot;#A71930&quot;             &quot;#CE1141&quot;             &quot;#DF4601&quot; 
+##        Boston Red Sox          Chicago Cubs     Chicago White Sox 
+##             &quot;#BD3039&quot;             &quot;#0E3386&quot;             &quot;#27251F&quot; 
+##       Cincinnati Reds   Cleveland Guardians      Colorado Rockies 
+##             &quot;#C6011F&quot;             &quot;#00385D&quot;             &quot;#333366&quot; 
+##        Detroit Tigers        Houston Astros    Kansas City Royals 
+##             &quot;#0C2340&quot;             &quot;#002D62&quot;             &quot;#004687&quot; 
+##    Los Angeles Angels   Los Angeles Dodgers         Miami Marlins 
+##             &quot;#003263&quot;             &quot;#005A9C&quot;             &quot;#00A3E0&quot; 
+##     Milwaukee Brewers       Minnesota Twins         New York Mets 
+##             &quot;#12284B&quot;             &quot;#002B5C&quot;             &quot;#002D72&quot; 
+##      New York Yankees     Oakland Athletics Philadelphia Phillies 
+##             &quot;#003087&quot;             &quot;#003831&quot;             &quot;#E81828&quot; 
+##    Pittsburgh Pirates      San Diego Padres  San Francisco Giants 
+##             &quot;#FDB827&quot;             &quot;#2F241D&quot;             &quot;#FD5A1E&quot; 
+##      Seattle Mariners   St. Louis Cardinals        Tampa Bay Rays 
+##             &quot;#0C2C56&quot;             &quot;#C41E3A&quot;             &quot;#092C5C&quot; 
+##         Texas Rangers     Toronto Blue Jays  Washington Nationals 
+##             &quot;#003278&quot;             &quot;#134A8E&quot;             &quot;#AB0003&quot;</code></pre>
+</div>
+<div id="구장-건설비용-분석" class="section level2">
+<h2>구장 건설비용 분석</h2>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> mlbpark <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>Opened, <span class="at">y=</span>Cost, <span class="at">color=</span><span class="st">`</span><span class="at">Rooftype</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1900</span>, <span class="dv">2022</span>),</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1900</span>, <span class="dv">2022</span>, <span class="at">by =</span> <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2500</span>),</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2500</span>, <span class="at">by =</span> <span class="dv">500</span>),</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;0&quot;</span>, <span class="st">&quot;5000억&quot;</span>, <span class="st">&quot;1조&quot;</span>, <span class="st">&quot;1조5천억&quot;</span>, <span class="st">&quot;2조&quot;</span>, <span class="st">&quot;2조5천억</span><span class="sc">\n</span><span class="st">(원)&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">&quot;현재 쓰이는 MLB 구장의 건설연도와 건설비용&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.7</span>),</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">size=</span><span class="fl">0.5</span>, </span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">linetype=</span><span class="st">&quot;solid&quot;</span>, </span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">colour =</span><span class="st">&quot;darkblue&quot;</span>),</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<pre><code>## Warning: The `size` argument of `element_rect()` is deprecated as of ggplot2 3.4.0.
+## i Please use the `linewidth` argument instead.</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># guides(fill = guide_legend(nrow = 4, byrow = T))</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>g2</span></code></pre></div>
+<p><img src="MLB_ballparks_files/figure-html/unnamed-chunk-11-1.png" width="960" />
+## 구장 위치 분석 ### 구장 위치 좌표 크롤링</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>url1 <span class="ot">&lt;-</span> <span class="st">&quot;https://en.wikipedia.org/wiki/American_Family_Field&quot;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>webc <span class="ot">&lt;-</span> rvest<span class="sc">::</span><span class="fu">read_html</span>(url1)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>webc <span class="sc">%&gt;%</span> </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  rvest<span class="sc">::</span><span class="fu">html_nodes</span>(<span class="st">&quot;td&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  rvest<span class="sc">::</span><span class="fu">html_text</span>() <span class="ot">-&gt;</span> webtd</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>coordinatetd <span class="ot">&lt;-</span> webtd[<span class="fu">grepl</span>(<span class="st">&quot;Coordinates&quot;</span>, webtd)]</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;^.*</span><span class="sc">\\</span><span class="st">Coor&quot;</span>,<span class="st">&quot;Coor&quot;</span>,coordinatetd)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>coor <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;^.*</span><span class="sc">\\</span><span class="st">°W / &quot;</span>,<span class="st">&quot;&quot;</span>,coord)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>coor</span></code></pre></div>
+<pre><code>## [1] &quot;Coordinates: 43°1′42″N 87°58′16″W&lt;U+FEFF&gt; / &lt;U+FEFF&gt;43.02833°N 87.97111°W&lt;U+FEFF&gt; / 43.02833; -87.97111&quot;</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>scrape_coordinate_wiki <span class="ot">&lt;-</span> <span class="cf">function</span>(url) {</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  webc <span class="ot">&lt;-</span> rvest<span class="sc">::</span><span class="fu">read_html</span>(url)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  webtd <span class="ot">&lt;-</span> webc <span class="sc">%&gt;%</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  rvest<span class="sc">::</span><span class="fu">html_nodes</span>(<span class="st">&quot;td&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  rvest<span class="sc">::</span><span class="fu">html_text</span>()</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  coordinatetd <span class="ot">&lt;-</span> webtd[<span class="fu">grepl</span>(<span class="st">&quot;Coordinates&quot;</span>, webtd)]</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  coord <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;^.*</span><span class="sc">\\</span><span class="st">Coor&quot;</span>,<span class="st">&quot;Coor&quot;</span>, coordinatetd)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  coor <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;^.*</span><span class="sc">\\</span><span class="st">°W﻿ / &quot;</span>,<span class="st">&quot;&quot;</span>, coord)</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  coordinate <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">url =</span> url,</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">coor =</span> coor</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(mlb<span class="sc">$</span>url)</span></code></pre></div>
+<pre><code>## [1] 30</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scrape_coordinate_wiki</span>(mlb<span class="sc">$</span>url[<span class="dv">2</span>])</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>urllist <span class="ot">&lt;-</span>mlb<span class="sc">$</span>url</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>all_coord <span class="ot">&lt;-</span> <span class="fu">data.frame</span>() </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">length</span>(urllist)){</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  coordinate <span class="ot">&lt;-</span> <span class="fu">scrape_coordinate_wiki</span>(urllist[i])</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  all_coord <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_coord, coordinate)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>all_coord</span></code></pre></div>
+<pre><code>##                                            url
+## 1 https://en.wikipedia.org/wiki/Yankee_Stadium
+##                                                                                                               coor
+## 1 Coordinates: 40°49′45″N 73°55′35″W&lt;U+FEFF&gt; / &lt;U+FEFF&gt;40.82917°N 73.92639°W&lt;U+FEFF&gt; / 40.82917; -73.92639</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>mlb <span class="ot">&lt;-</span> <span class="fu">left_join</span>(mlb, all_coord, <span class="at">by=</span><span class="st">&quot;url&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grepl</span>(<span class="st">&quot;;&quot;</span>, <span class="st">&quot;,&quot;</span>,mlb<span class="sc">$</span>coor)</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 구</span></span></code></pre></div>
+</div>
+<div id="기초-인터랙티브" class="section level2">
+<h2>기초 인터랙티브</h2>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(rCharts)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> rCharts<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>p2<span class="sc">$</span><span class="fu">setLib</span>(<span class="st">&#39;libraries/widgets/nyt_home&#39;</span>)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>p2<span class="sc">$</span><span class="fu">setTemplate</span>(<span class="at">script =</span> <span class="st">&quot;libraries/widgets/nyt_home/layouts/nyt_home.html&quot;</span>)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>p2<span class="sc">$</span><span class="fu">set</span>(</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">&quot;This data comes from the managers dataset included in the R package PerformanceAnalytics.&quot;</span>,</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> managers.melt,</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">groups =</span> <span class="st">&quot;manager&quot;</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">noquote</span>(p2<span class="sc">$</span><span class="fu">html</span>()))</span></code></pre></div>
+</div>
+</div>
+<div id="결론-및-마무리" class="section level1">
+<h1>결론 및 마무리</h1>
+<div id="이미지-저장" class="section level2">
+<h2>이미지 저장</h2>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;./mlb_cap.svg&quot;</span>, g1)</span></code></pre></div>
+<pre><code>## Saving 10 x 6 in image</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;./mlb_cost.svg&quot;</span>, g2)</span></code></pre></div>
+<pre><code>## Saving 10 x 6 in image</code></pre>
+</div>
+<div id="파일-저장-1" class="section level2">
+<h2>파일 저장</h2>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(mlb, <span class="st">&quot;./mlb_stadium.csv&quot;</span>)</span></code></pre></div>
+<p>finalise_plot(plot_name, source_name, save_filepath, width_pixels,
+height_pixels, logo_image_path)</p>
+<p>Note that the <code>echo = FALSE</code> parameter was added to the
+code chunk to prevent printing of the R code that generated the
+plot.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

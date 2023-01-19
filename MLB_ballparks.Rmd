@@ -32,7 +32,10 @@ library(readtext)
 library(flextable)
 library(webdriver)
 library(readxl)
-library(geosphere)   
+library(geosphere) 
+library(leaflet)
+library(ggmap)
+library(htmltools)
 klippy::klippy()
 options(scipen=999)
 setwd(".")
@@ -236,7 +239,7 @@ mlb_2.5 <- left_join(mlb, all_coord, by="url")
 
 
 ```{r}
-mlb_3 <- mlb_2.5 %>% separate(coor, c('coordX', 'coordY'), sep = ";")
+mlb_3 <- mlb_2.5 %>% separate(coor, c('coordY', 'coordX'), sep = ";")
 
 ```
 
@@ -249,7 +252,7 @@ mlb_3 <- mlb_2.5 %>% separate(coor, c('coordX', 'coordY'), sep = ";")
 
 ```{r}
 cityhall <- read_excel("./geocode_comparison_v5.xlsx", sheet=2) %>% select(c(3,4,6,7))
-colnames(cityhall) <- c("GeographicArea", "Population2010", "hallcoordX", "hallcoordY")
+colnames(cityhall) <- c("GeographicArea", "Population2010", "hallcoordY", "hallcoordX")
 ```
 
 
@@ -303,31 +306,79 @@ map <- get_map(location='united states',
 
 
 ```{r}
-ggmap(map) + 
-  geom_point(data=mlb_base,
-             aes(x=coordY, y=coordX, 
-                 palette=colorcode),
-             size=3,
-             alpha = 1) + 
-  theme(legend.position = "none")
-```
-
-```{r}
 library(usmap)
 library(ggplot2)
 library(maps)
 us_states <- map_data("state")
 
 ```
-```{r}
-p <- ggplot(data = us_states,
-            mapping = aes(x = long, y = lat,
-                          group = group, fill = region))
 
+
+```{r}
+uscenter <- c(-98.5795, 39.828175)
+us1 <- leaflet(data=mlb_base) |> setView(lng = uscenter[1], 
+                           lat = uscenter[2], 
+                           zoom = 3) |> addProviderTiles("Stamen.Toner")
+us1
+```
+
+
+```{r}
+park_info <- 
+  paste(mlb_base$Name, 
+        "<br>팀:", mlb_base$Team,
+        "<br>개장연도", mlb_base$Opened,
+        "<br>수용인원:", mlb_base$Capacity, "명",
+        "<br>위키페이지:", 
+        paste('<a href="', mlb_base$url,'" target="_blank">', mlb_base$Name, '</a>'))
+
+city_info <- 
+  paste(mlb_base$Basecity, "시청사",
+        "<br>2010년 인구:", mlb_base$Population2010, "명")
+```
+
+
+```{r}
+mlbmap <- us1 |> addCircleMarkers(~coordX, ~coordY,
+                          color=mlb$colorcode,
+                          radius = 4,
+                          fillOpacity = 1,
+                          stroke = F,
+                          popup=~park_info
+                          )
+
+mlbmap
+```
+
+
+```{r}
+awesome <- makeAwesomeIcon(
+  icon = "cityhall",
+  iconColor = "black",
+  markerColor = "blue",
+  library = "fa"
+)
+
+mlbmap |> addAwesomeMarkers(~hallcoordX, ~hallcoordY,
+                        popup=~city_info,
+                        icon = cityhall
+                        )
+```
+
+
+```{r}
+```
+```{r}
+pal <- colorFactor(c("navy", "red"), domain = c("ship", "pirate"))
+```
+
+
+```{r}
 statemap <- p + geom_polygon(color = "gray90", size = 0.1) +
     coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
     guides(fill = FALSE)
 ```
+
 
 ```{r}
 statemap+ geom_point(data=mlb_base,
